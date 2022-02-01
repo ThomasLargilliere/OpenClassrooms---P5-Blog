@@ -1,0 +1,82 @@
+#active-link{
+	text-decoration: underline;
+	color: white;
+}
+
+#home{
+	height: 100vh;
+	background: url('../images/pc-dev.jpg') no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+#photo-thomas{
+	width: 100%;
+	height: auto;
+	border: 1px solid black;
+	border-radius: 15px;
+}
+
+#social_networks{
+	display: flex;
+	justify-content: space-around;
+	list-style-type: none;
+	padding-left: 0;
+}
+
+.link_social_network{
+	color: black;
+	font-size: 20px;
+}
+
+.text-justify{
+	text-align: justify;
+}
+
+#page_article{
+	display: flex;
+	justify-content: center;
+	list-style-type: none;
+	padding-left: 0;
+}
+
+.link_page_article{
+	color: black;
+	font-size: 18px;
+	width: 100%;
+	margin: 0 5px;
+	text-decoration: underline;
+}
+
+.content-height{
+	padding-top: 8rem;
+}
+
+.alert{
+	position: absolute !important;
+	top: 125px !important;
+	z-index: 99999 !important;
+}
+
+.alert > div > span{
+	position: absolute;
+	top: 5%;
+	left: 95%;
+	font-size: 30px;
+}
+
+.form-control{ 
+	font-size: 15px !important; 
+}
+
+.form-label{
+	font-size:16px !important;
+}
+
+#testok{
+	position: absolute !important;
+	top: 125px !important;
+	z-index: 99999 !important;
+}
