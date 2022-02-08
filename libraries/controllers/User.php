@@ -169,4 +169,65 @@ class User extends Controller
         \Http::redirect('index.php?action=administration&task=user');
     }
 
+    public function passwordforget()
+    {
+        $email = null;
+        if (!empty($_POST['email'])) {
+            $email = htmlspecialchars($_POST['email']);
+        }
+
+        if (!$email){
+            throw \Controllers\Router::error('danger', 'Veuillez remplir correctement le formulaire');
+        }
+
+        $verifEmail = $this->model->findUserByEmail($email);
+
+        if (!$verifEmail){
+            throw \Controllers\Router::error('danger', 'Aucun compte trouvé lié à cet email');
+        }
+
+        $id_user = $verifEmail['id'];
+        $token = openssl_random_pseudo_bytes(30);
+        $token = bin2hex($token);
+
+        $this->model->setToken($id_user, $token);
+        $mailerModel = new \Models\Mailer;
+        $mailerModel->sendMailForPassword($email, $token);
+
+        \Http::redirect('index.php');
+    }
+
+    public function changepassword()
+    {
+        $token = null;
+        if (!empty($_GET['token'])) {
+            $token = htmlspecialchars($_GET['token']);
+        }
+
+        $tokenInfo = $this->model->getTokenInfo($token);
+        
+        if (!$tokenInfo){
+            throw \Controllers\Router::error('danger', 'Impossible de changer de mot de passe avec ce lien');
+        }
+
+        $newPassword = null;
+        if (!empty($_POST['password']) && !empty($_POST['confirmPassword'])){
+            if ($_POST['password'] != $_POST['confirmPassword']){
+                throw \Controllers\Router::error('danger', 'Les mots de passes ne correspondent pas', '?action=user&task=changepassword&token='. $token);
+            }
+            $newPassword = $_POST['password'];
+        }
+
+        if (!$newPassword){
+            $pageTitle = "Changement de mot de passe";
+            \Renderer::render('changePassword', compact('pageTitle'));
+        } else {
+            $this->model->deleteToken($token);
+            $this->model->updatePassword($tokenInfo['id_user'], $newPassword);
+            \Controllers\Router::message('success', "Mot de passe modifié");
+            \Http::redirect('index.php');
+        }
+
+    }
+
 }
