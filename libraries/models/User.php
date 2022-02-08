@@ -19,8 +19,7 @@ class User extends Model
         $user = $query->fetch();
         return $user;
     }
-
-
+    
     /**
      * Insere un nouvel utilisateur dans la base de données
      * 
@@ -72,6 +71,12 @@ class User extends Model
         $_SESSION['user'] = $user['id'];
     }
 
+    /**
+     * Permet de vérifié qu'un utilisateur connecté est administrateur
+     * 
+     * @return boolean
+     */
+
     public function isAdmin()
     {
         $id = $_SESSION['user'];
@@ -95,6 +100,20 @@ class User extends Model
         return $articles;
     }
 
+    /**
+     * Permet de changer certaines informations d'un utilisateur
+     * 
+     * @param integer $id
+     * @param string $email
+     * @param string $pseudo
+     * @param string $first_name
+     * @param string $name
+     * @param integer $id_role
+     * @param string $password
+     * 
+     * @return void
+     */
+
     public function update(int $id, string $email, string $pseudo, string $first_name, string $name, int $id_role, ?string $password): void
     {
         $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'id');
@@ -108,6 +127,65 @@ class User extends Model
 
         $query = $this->pdo->prepare("UPDATE user SET {$set} WHERE id = :id");
         $query->execute($args);        
+    }
+
+    /**
+     * Permet de changer le mot de passe d'un utilisateur
+     * 
+     * @param integer $id
+     * @param string $password
+     * 
+     * @return void
+     */
+
+    public function updatePassword(int $id, string $password): void
+    {
+        $password = password_hash($password, PASSWORD_BCRYPT);
+        $query = $this->pdo->prepare("UPDATE user SET password = :password WHERE id = :id");
+        $query->execute(compact('id', 'password'));         
+    }
+
+    /**
+     * Insère un token dans la bdd pour changer de mot de passe
+     * 
+     * @param integer $id_user
+     * @param string $token
+     * 
+     * @return void
+     */
+
+    public function setToken(int $id_user, string $token): void
+    {
+
+        $query = $this->pdo->prepare("DELETE FROM token_password WHERE id_user = :id_user");
+        $query->execute(compact('id_user'));
+
+        $query = $this->pdo->prepare("INSERT INTO token_password VALUES (:id_user, :token, NOW())");
+        $query->execute(compact('id_user', 'token'));  
+    }
+
+    /**
+     * Permet de récuperer les informations d'un token
+     * 
+     * @param string $token
+     */
+
+    public function getTokenInfo(string $token)
+    {
+        $query = $this->pdo->prepare("SELECT * FROM token_password WHERE token = :token");
+        $query->execute(compact('token'));
+        $tokenInfo = $query->fetch();
+        return $tokenInfo;
+    }
+    /**
+     * Permet de supprimer un token
+     * 
+     * @param string $token
+     */
+    public function deleteToken(string $token)
+    {
+        $query = $this->pdo->prepare("DELETE FROM token_password WHERE token = :token");
+        $query->execute(compact('token'));
     }
 
 }
