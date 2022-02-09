@@ -9,13 +9,6 @@ class Article extends Controller
 
     protected $modelName = \Models\Article::class;
 
-    public function index()
-    {
-        $articles = $this->model->findAll('created_at DESC');
-        $pageTitle = "Liste des articles";
-        \Renderer::render('listArticles', compact('pageTitle', 'articles'));
-    }
-
     public function read()
     {
         $commentModel = new \Models\Comment();
@@ -81,7 +74,32 @@ class Article extends Controller
             throw \Controllers\Router::error('danger', "Vous n'avez pas le droit d'écrire un article");
         }
 
-        $this->model->insert($title, $chapo, $content);
+        $imageArticle = null;
+        if ($_FILES['image']['name'] != ""){
+            $typeFile = $_FILES['image']['type'];
+            if ($typeFile != "image/png" && $typeFile != "image/jpg" && $typeFile != "image/jpeg"){
+                throw \Controllers\Router::error('danger', "Type de l'image incorrect (acceptée : PNG / JPG)", "http://localhost/blog/index.php?action=administration&task=writeArticle");
+            }
+
+            $sizeFile = $_FILES['image']['size'];
+            if ($sizeFile > 10000000){
+                throw \Controllers\Router::error('danger', "Taille de l'image trop grande (max : 10 Mo)", "http://localhost/blog/index.php?action=administration&task=writeArticle");
+            }
+
+            $token = openssl_random_pseudo_bytes(20);
+            $token = bin2hex($token);
+
+            $target_dir = 'public/images/articles/';
+            $target_file = $target_dir . $token . basename($_FILES['image']['name']);
+
+            if (!move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                throw \Controllers\Router::error('danger', "Une erreur est survenue lors de la mise en ligne de l'image veuillez réessayer", "http://localhost/blog/index.php?action=administration&task=writeArticle");
+            }
+            $imageArticle = $target_file;
+        }
+        
+
+        $this->model->insert($title, $chapo, $content, $imageArticle);
         \Controllers\Router::message('success', "L'article a bien été ajouté");
         \Http::redirect('index.php?action=administration&task=article');
     }
@@ -161,7 +179,32 @@ class Article extends Controller
             throw \Controllers\Router::error('danger', "Vous n'avez pas le droit de modifier un article");
         }
 
-        $this->model->update($title, $chapo, $content, $id_article);
+        $imageArticle = null;
+
+        if ($_FILES['image']['name'] != ""){
+            $typeFile = $_FILES['image']['type'];
+            if ($typeFile != "image/png" && $typeFile != "image/jpg" && $typeFile != "image/jpeg"){
+                throw \Controllers\Router::error('danger', "Type de l'image incorrect (acceptée : PNG / JPG)");
+            }
+
+            $sizeFile = $_FILES['image']['size'];
+            if ($sizeFile > 10000000){
+                throw \Controllers\Router::error('danger', "Taille de l'image trop grande (max : 10 Mo)");
+            }
+
+            $token = openssl_random_pseudo_bytes(20);
+            $token = bin2hex($token);
+
+            $target_dir = 'public/images/articles/';
+            $target_file = $target_dir . $token . basename($_FILES['image']['name']);
+
+            if (!move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                throw \Controllers\Router::error('danger', "Une erreur est survenue lors de la mise en ligne de l'image veuillez réessayer");
+            }
+            $imageArticle = $target_file;
+        }
+
+        $this->model->update($title, $chapo, $content, $id_article, $imageArticle);
         \Controllers\Router::message('success', "L'article a bien été modifié");
         \Http::redirect('index.php?action=administration&task=article');
     }
