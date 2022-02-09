@@ -24,12 +24,19 @@
         <div class="row justify-content-center text-center">
             <?php foreach ($articles as $article){ ?>
             <div class="col-md-6 col-lg-4 mb-5">
-                <div class="portfolio-item mx-auto">
-                    <h3><?= $article['title']; ?></h3>
-                    <p class="chapo-portfolio">
-                        <?= $article['chapo']; ?>
-                    </p>
-                    <a class="link-portfolio" href="index.php?action=article&task=read&id=<?=$article['id']?>">Lire en entier</a>
+                <div><?=$article['title']; ?></div>
+                <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
+                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                        <div class="text-center text-white">
+                            <div class="portfolio-chapo">
+                                <?= $article['chapo']; ?>
+                            </div>
+                            <div class="div-link-portfolio">
+                                <a class="link-portfolio" href="index.php?action=article&task=read&id=<?=$article['id']?>">Lire en entier</a>
+                            </div>
+                        </div>
+                    </div>
+                    <img style="height:250px;" class="img-fluid" src="<?=$article['image']?>" alt="Image article" />
                 </div>
             </div>
             <?php } ?>

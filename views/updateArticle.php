@@ -2,7 +2,10 @@
 
 <div class="col-lg-6 offset-lg-3 col-10 offset-1 content-height">
     <h1>Modifier un article</h1>
-    <form method="POST" action="index.php?action=article&task=update&id=<?= $article['id']; ?>">
+    <form method="POST" action="index.php?action=article&task=update&id=<?= $article['id']; ?>" enctype="multipart/form-data">
+        <div class="form-group mt-3">
+            <input type="file" class="form-control" name="image" accept="image/png, image/jpeg">
+        </div>
         <div class="form-group mt-3">
             <input type="text" class="form-control" name="title" value="<?= $article['title']; ?>">
         </div>
