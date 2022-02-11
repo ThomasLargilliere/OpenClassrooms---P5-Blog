@@ -110,11 +110,12 @@ class User extends Model
      * @param string $name
      * @param integer $id_role
      * @param string $password
+     * @param string $image
      * 
      * @return void
      */
 
-    public function update(int $id, string $email, string $pseudo, string $first_name, string $name, int $id_role, ?string $password): void
+    public function update(int $id, string $email, string $pseudo, string $first_name, string $name, int $id_role, ?string $password, ?string $image): void
     {
         $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'id');
         $set = 'email = :email, pseudo = :pseudo, first_name = :first_name, name = :name, id_role = :id_role';
@@ -122,7 +123,16 @@ class User extends Model
         if ($password != null){
             $password = password_hash($password, PASSWORD_BCRYPT);
             $set = $set . ', password = :password';
-            $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'password', ('id'));
+            $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'password', 'id');
+        }
+
+        if ($image != null){
+            $set = $set . ', image = :image';
+            $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'image', 'id');
+        }
+
+        if ($image != null && $password != null){
+            $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'password', 'image', 'id');
         }
 
         $query = $this->pdo->prepare("UPDATE user SET {$set} WHERE id = :id");
