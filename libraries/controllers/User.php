@@ -230,4 +230,83 @@ class User extends Controller
 
     }
 
+    public function updateProfil()
+    {
+        $id = $_SESSION['user'];
+        if (!$id){
+            throw \Controllers\Router::error('danger', 'Veuillez vous connecter pour faire cela');
+        }
+
+        $email = null;
+        $pseudo = null;
+        $first_name = null;
+        $name = null;
+
+        if (!empty($_POST['email'])) {
+            $email = htmlspecialchars($_POST['email']);
+        }
+
+        if (!empty($_POST['pseudo'])) {
+            $pseudo = htmlspecialchars($_POST['pseudo']);
+        }
+
+        if (!empty($_POST['first_name'])) {
+            $first_name = htmlspecialchars($_POST['first_name']);
+        }
+
+        if (!empty($_POST['name'])) {
+            $name = htmlspecialchars($_POST['name']);
+        }
+
+        $old_password = null;
+        if (!empty($_POST['old_password'])) {
+            $old_password = htmlspecialchars($_POST['old_password']);
+        }
+
+        $userTest = $this->model->find($id);
+        if (!password_verify($old_password, $userTest['password'])){
+            throw \Controllers\Router::error('danger', 'Ancien mot de passe incorrect, les données n\'ont pas été changées !');
+        }
+
+        $new_password = null;
+        if (!empty($_POST['new_password1']) && !empty($_POST['new_password2'])) {
+            if ($_POST['new_password1'] == $_POST['new_password2']){
+                $new_password = htmlspecialchars($_POST['new_password1']);
+            } else {
+                throw \Controllers\Router::error('danger', 'Les deux nouveaux mots de passes ne correspondent pas, les données n\'ont pas été changées !');
+            }
+        }
+
+        $role = $userTest['id_role'];
+
+        $imageUser = null;
+        if ($_FILES['image']['name'] != ""){
+            $typeFile = $_FILES['image']['type'];
+            if ($typeFile != "image/png" && $typeFile != "image/jpg" && $typeFile != "image/jpeg"){
+                throw \Controllers\Router::error('danger', "Type de l'image incorrect (acceptée : PNG / JPG)", "http://localhost/blog/index.php?action=administration&task=writeArticle");
+            }
+
+            $sizeFile = $_FILES['image']['size'];
+            if ($sizeFile > 10000000){
+                throw \Controllers\Router::error('danger', "Taille de l'image trop grande (max : 10 Mo)", "http://localhost/blog/index.php?action=administration&task=writeArticle");
+            }
+
+            $token = openssl_random_pseudo_bytes(20);
+            $token = bin2hex($token);
+
+            $target_dir = 'public/images/profils/';
+            $target_file = $target_dir . $token . basename($_FILES['image']['name']);
+
+            if (!move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                throw \Controllers\Router::error('danger', "Une erreur est survenue lors de la mise en ligne de l'image veuillez réessayer", "http://localhost/blog/index.php?action=administration&task=writeArticle");
+            }
+            $imageUser = $target_file;
+        }
+
+        $this->model->update($id, $email, $pseudo, $first_name, $name, $role, $new_password, $imageUser);
+        \Controllers\Router::message('success', "Profil mis à jour !");
+        \Http::redirect('index.php');        
+
+    }
+
 }
