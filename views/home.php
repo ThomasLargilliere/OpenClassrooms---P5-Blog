@@ -24,7 +24,7 @@
         <div class="row justify-content-center text-center">
             <?php foreach ($articles as $article){ ?>
             <div class="col-md-6 col-lg-4 mb-5">
-                <div><?=$article['title']; ?></div>
+                <p class="font-weight-bold text-uppercase"><?=$article['title']; ?></p>
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="text-center text-white">
@@ -87,21 +87,21 @@
             <div class="col-lg-8 col-xl-7">
                 <form id="contactForm" method="POST" action="index.php?action=mailer&task=send">
                     <div class="form-floating mb-4">
-                        <input class="form-control" id="first_name" name="first_name" type="text" placeholder="Entrer votre prénom..." />
+                        <input class="form-control" id="first_name" name="first_name" type="text" placeholder="Entrer votre prénom..." required />
                         <label class="form-label" for="first_name">Prénom</label>
                     </div>
 
                     <div class="form-floating mb-4">
-                        <input class="form-control" id="name" name="name" type="text" placeholder="Entrer votre nom..." />
+                        <input class="form-control" id="name" name="name" type="text" placeholder="Entrer votre nom..." required />
                         <label class="form-label" for="name">Nom</label>
                     </div>
 
                     <div class="form-floating mb-4">
-                        <input class="form-control" id="email" name="email" type="email" placeholder="nom@exemple.fr" />
+                        <input class="form-control" id="email" name="email" type="email" placeholder="nom@exemple.fr" required />
                         <label class="form-label" for="email">Email</label>
                     </div>
                     <div class="form-floating mb-4">
-                        <textarea class="form-control" id="message" name="content" type="text" placeholder="Entrer votre message ici..." style="height: 10rem"></textarea>
+                        <textarea class="form-control" id="message" name="content" type="text" placeholder="Entrer votre message ici..." style="height: 10rem" required></textarea>
                         <label class="form-label" for="message">Message</label>
                     </div>
                     <button class="btn btn-primary btn-xl" id="submitButton" type="submit">Envoyer</button>

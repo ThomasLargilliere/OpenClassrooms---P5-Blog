@@ -4,16 +4,16 @@
     <h1>Modifier un utilisateur</h1>
     <form method="POST" action="index.php?action=user&task=update&id=<?= $user['id']; ?>">
         <div class="form-group mt-3">
-            <input type="email" class="form-control" name="email" value="<?= $user['email']; ?>">
+            <input type="email" class="form-control" name="email" value="<?= $user['email']; ?>" required />
         </div>
         <div class="form-group mt-3">
-            <input type="text" class="form-control" name="pseudo" value="<?= $user['pseudo']; ?>">
+            <input type="text" class="form-control" name="pseudo" value="<?= $user['pseudo']; ?>" required />
         </div>
         <div class="form-group mt-3">
-            <input type="text" class="form-control" name="first_name" value="<?= $user['first_name']; ?>">
+            <input type="text" class="form-control" name="first_name" value="<?= $user['first_name']; ?>" required />
         </div>
         <div class="form-group mt-3">
-            <input type="text" class="form-control" name="name" value="<?= $user['name']; ?>">
+            <input type="text" class="form-control" name="name" value="<?= $user['name']; ?>" required />
         </div>
         <div class="form-group mt-3">
             <select class="form-control" name="role">
@@ -23,7 +23,7 @@
             </select>
         </div>
         <div class="form-group mt-3">
-            <input type="text" class="form-control" name="password" placeholder="Laisser vide pour ne pas modifier">
+            <input type="text" class="form-control" name="password" placeholder="Laisser vide pour ne pas modifier" required />
         </div>
         <button type="submit" class="btn btn-warning mt-3">Modifier</button>
     </form>

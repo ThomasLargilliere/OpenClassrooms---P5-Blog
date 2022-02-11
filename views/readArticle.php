@@ -3,17 +3,27 @@
 <div class="col-lg-8 offset-lg-2 content-height">
 	<h1 class="text-center display-2"><?= $article['title']; ?></h1>
 	<div class="col-10 offset-1 p-1 mt-2">
-		<?php if ($article['updated_at'] == null){ ?>
+		<!-- <?php if ($article['updated_at'] == null){ ?>
 			<p>Ecris le : <?= $article['created_at']; ?></p>
 		<?php } else { ?> 
 			<p>Modifié le : <?= $article['updated_at']; ?></p>
-		<?php } ?>
+		<?php } ?> -->
 		<p class="text-justify"><?= $article['chapo']; ?></p>
 		
 		<p class="text-justify">
 			<?php echo nl2br($article['content']); ?>
 		</p>
-		<p>Ecris par : <?= $author ?></p>
+
+		<div class="d-flex">
+			<?php if ($article['imgUser']) { ?>
+			<div>
+				<img style="width:100px;height:100px;border-radius:50%;" src="<?= $article['imgUser']; ?>">
+			</div>
+			<?php } ?>
+			<div class="<?php if ($article['imgUser']){ echo 'mx-2'; } ?> mt-4">
+				<p style="font-weight:bold;">Ecris le : <?= $article['created_at']; ?> par <?= $article['pseudo']; ?></p>
+			</div>
+		</div>
 
 		<a href="index.php?#article">Retour</a>
 	</div>
@@ -25,7 +35,7 @@
 				<div class="form-group mt-3">
 					<textarea class="form-control" rows="5" name="content" placeholder="Votre commentaire ici"></textarea>
 				</div>
-				<input type="hidden" name="id_article" value="<?= $article['id']; ?>">
+				<input type="hidden" name="id_article" value="<?= $article['idArticle']; ?>">
 				<button type="submit" class="btn btn-primary mt-3">Envoyer</button>
 			</form>
 		<?php } else { ?>
@@ -39,10 +49,10 @@
 			<div class="d-flex">
 				<?php if ($commentaire['image']) { ?>
 				<div>
-					<img style="width:50px;height: 50px;" src="<?= $commentaire['image']; ?>">
+					<img style="width:50px;height:50px;border-radius:50%;" src="<?= $commentaire['image']; ?>">
 				</div>
 				<?php } ?>
-				<div class="<?php if ($commentaire['image']){ echo 'mx-2'; } ?>">
+				<div class="<?php if ($commentaire['image']){ echo 'mx-2'; } ?> mt-2">
 					<p>Ecris le : <?= $commentaire['formated_created_at']; ?> par <?= $commentaire['pseudo']; ?></p>
 				</div>
 			</div>
