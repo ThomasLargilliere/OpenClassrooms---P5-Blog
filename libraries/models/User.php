@@ -120,18 +120,18 @@ class User extends Model
         $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'id');
         $set = 'email = :email, pseudo = :pseudo, first_name = :first_name, name = :name, id_role = :id_role';
 
-        if ($password != null){
+        if ($password !== null){
             $password = password_hash($password, PASSWORD_BCRYPT);
             $set = $set . ', password = :password';
             $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'password', 'id');
         }
 
-        if ($image != null){
+        if ($image !== null){
             $set = $set . ', image = :image';
             $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'image', 'id');
         }
 
-        if ($image != null && $password != null){
+        if ($image !== null && $password !== null){
             $args = compact('email', 'pseudo', 'first_name', 'name', 'id_role', 'password', 'image', 'id');
         }
 
