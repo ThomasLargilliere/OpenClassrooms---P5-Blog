@@ -6,7 +6,7 @@ class Router
     public function index()
     {
         $articleModel = new \Models\Article();
-        $articles = $articleModel->findAll('created_at DESC');
+        $articles = $articleModel->findAll('id DESC');
         $pageTitle = "Accueil";
         \Renderer::render('home', compact('pageTitle', 'articles'));
     }
@@ -20,7 +20,6 @@ class Router
     {
         \Controllers\Router::message($type, $msgContent);
         \Http::redirect($redirect);
-        die();
     }
 
 }
