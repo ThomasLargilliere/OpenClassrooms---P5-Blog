@@ -3,11 +3,6 @@
 <div class="col-lg-8 offset-lg-2 content-height">
 	<h1 class="text-center display-2"><?= $article['title']; ?></h1>
 	<div class="col-10 offset-1 p-1 mt-2">
-		<!-- <?php if ($article['updated_at'] == null){ ?>
-			<p>Ecris le : <?= $article['created_at']; ?></p>
-		<?php } else { ?> 
-			<p>Modifié le : <?= $article['updated_at']; ?></p>
-		<?php } ?> -->
 		<p class="text-justify"><?= $article['chapo']; ?></p>
 		
 		<p class="text-justify">
@@ -21,7 +16,11 @@
 			</div>
 			<?php } ?>
 			<div class="<?php if ($article['imgUser']){ echo 'mx-2'; } ?> mt-4">
-				<p style="font-weight:bold;">Ecris le : <?= $article['created_at']; ?> par <?= $article['pseudo']; ?></p>
+				<?php if ($article['updated_at'] === null){ ?>
+					<p style="font-weight:bold;">Ecris le : <?= $article['created_at']; ?> par <?= $article['pseudo']; ?></p>
+				<?php } else { ?> 
+					<p style="font-weight:bold;">Modifié le : <?= $article['updated_at']; ?> par <?= $article['pseudo']; ?></p>
+				<?php } ?>
 			</div>
 		</div>
 

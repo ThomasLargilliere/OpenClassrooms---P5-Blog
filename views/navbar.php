@@ -176,7 +176,7 @@ if (isset($_SESSION['user'])){
                     <div class="form-floating mb-3 mt-3">
                         <input type="file" class="form-control" name="image" accept="image/png, image/jpeg">
                     </div>
-                    <?php if ($user['image'] != null){ ?>
+                    <?php if ($user['image'] !== null){ ?>
                         <div style="width:200px;height:200px";>
                             <img style="width:100%;height:auto" src="<?= $user['image']; ?>">
                         </div>
