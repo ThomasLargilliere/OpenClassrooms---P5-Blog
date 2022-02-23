@@ -40,6 +40,5 @@ class Mailer extends Controller
         }
 
         $this->model->send($first_name, $name, $email, $content);
-        \Http::redirect('index.php');
     }
 }
