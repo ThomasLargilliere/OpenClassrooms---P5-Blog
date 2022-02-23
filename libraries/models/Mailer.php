@@ -4,12 +4,8 @@ namespace Models;
 
 use PHPMailer\PHPMailer\PHPMailer;
 require 'vendor/autoload.php';
-
 class Mailer
 {
-    private $myMail = 'thomas.largilliere.mail@gmail.com';
-    private $myName = 'Thomas Largilliere';
-    private $myPassword = 'TheThomzsS93140';
     /**
      * Fonction permettant d'envoyer un mail
      * 
@@ -22,17 +18,18 @@ class Mailer
      */
     public function send(string $first_name, string $name, string $email, string $content): void
     {
+        require 'env.php';
         $mail = new PHPMailer;
         $mail->isSMTP();
         $mail->SMTPDebug = 2;
         $mail->Host = 'smtp.gmail.com';
         $mail->Port = 587;
         $mail->SMTPAuth = true;
-        $mail->Username = $this->myMail;
-        $mail->Password = $this->myPassword;
+        $mail->Username = $your_email;
+        $mail->Password = $your_password_email;
         $mail->setFrom($email, $first_name . ' ' . $name);
         $mail->addReplyTo($email, $first_name . ' ' . $name);
-        $mail->addAddress($this->myMail);
+        $mail->addAddress($your_email);
         $mail->Subject = 'Nouveau mail recu de ' . $first_name . ' ' . $name;
         $mail->Body = $content;
         if (!$mail->send()) {
@@ -52,17 +49,18 @@ class Mailer
      */
     public function sendMailForPassword(string $email, string $token): void
     {
+        require 'env.php';
         $mail = new PHPMailer;
         $mail->isSMTP();
         $mail->SMTPDebug = 2;
         $mail->Host = 'smtp.gmail.com';
         $mail->Port = 587;
         $mail->SMTPAuth = true;
-        $mail->Username = $this->myMail;
-        $mail->Password = $this->myPassword;
-        $mail->setFrom($this->myMail, 'Blog de ' . $this->myName);
+        $mail->Username = $your_email;
+        $mail->Password = $your_password_email;
+        $mail->setFrom($your_email, 'Blog de ' . $your_name);
         $mail->addAddress($email);
-        $mail->Subject = 'Mot de passe oublie sur le blog ' . $this->myName;
+        $mail->Subject = 'Mot de passe oublie sur le blog ' . $your_name;
         $mail->Body = "Pour changer votre mot de passe : http://localhost/blog?action=user&task=changepassword&token=" . $token;
         if (!$mail->send()) {
             throw \Controllers\Router::error('danger', "Erreur lors de l'envoie du mail");
